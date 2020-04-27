@@ -39,9 +39,14 @@
             $ts(container).appendElement(sampleInfo.createContextMenu());
             $ts(container).appendElement(sampleInfo.createSampleInfotable(raw));
 
-            // console.log(this.sampleInfo.Object);
-
             this.init();
+            this.sampleInfo = new Dictionary<HTMLTableRowElement[]>({});
+
+            let index: number = this.tableTitles.indexOf("sample_info");
+
+            for (let sample_group of $ts(this.trs).GroupBy(tr => tr.cells.item(index).innerText).ToArray(false)) {
+                this.sampleInfo.Add(sample_group.Key, sample_group.ToArray(false));
+            }
         }
 
         private lastSelectedRow: HTMLTableRowElement;
