@@ -8,6 +8,45 @@
 <script>
 $ts(function() {
 let ui = new biodeep.sampleInfo("#designer");
+let samplenames = [
+	"T202004_A01-1",
+"T202004_A01-2",
+"T202004_A01-3",
+"T202004_A01-4",
+"T202004_A01-5",
+"T202004_A01-6",
+"T202004_CK1",
+"T202004_CK2",
+"T202004_CK3",
+"T202004_CK4",
+"T202004_CK5",
+"T202004_CK6",
+"T202004_QC1",
+"T202004_QC2",
+"T202004_QC3"
+];
+
+console.table(biodeep.buildModels(biodeep.guess_groupInfo(samplenames)));
+
+samplenames = [
+"A01-1",
+"A01-2",
+"A01-3",
+"A01-4",
+"A01-5",
+"A01-6",
+"CK1",
+"CK2",
+"CK3",
+"CK4",
+"CK5",
+"CK6",
+"QC1",
+"QC2",
+"QC3"
+];
+
+console.table(biodeep.buildModels(biodeep.guess_groupInfo(samplenames)));
 
 })
 </script>
