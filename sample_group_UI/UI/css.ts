@@ -1,6 +1,7 @@
 namespace biodeep.ui {
 
     export function doStyle() {
-        $ts.select(".selected").style("background-color: lightBlue;");
+        $ts("head")
+            .appendElement($ts("<style>").display("background-color: lightBlue;"));
     }
 }
