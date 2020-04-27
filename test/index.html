@@ -66,13 +66,14 @@
 			
 			
 			$ts("#download_sampleinfo").onclick = function() {
-				DOM.download("sampleinfo.csv", $ts.csv.toUri(this.model));			
+				DOM.download("sampleinfo.csv", $ts.csv.toUri(ui.model));	
+					console.log(ui.csv);				
 			}
         })
 	
     </script>
  
- <a href="javascript:void(0);" id="download_sampleinfo"></a>
+ <a href="javascript:void(0);" id="download_sampleinfo">下载sampleInfo表格</a>
  
 </body>
 </html>

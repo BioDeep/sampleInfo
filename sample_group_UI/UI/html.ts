@@ -3,16 +3,14 @@
     /**
      * UI class for create sample group information
     */
-    export class sampleInfo {
+    export class sampleInfoUI {
 
-        private sampleInfo: Dictionary<HTMLTableRowElement[]>;
         private tableTitles: string[];
 
         public get model(): IsampleInfo[] {
             let vm = this;
 
-            return this.sampleInfo.Values
-                .Unlist(a => a)
+            return $ts(this.trs)
                 .Select(function (tr) {
                     let sample: IsampleInfo = <IsampleInfo>{};
                     let cells = tr.getElementsByTagName("td");
@@ -28,26 +26,25 @@
         public get csv(): string {
             let table: IsampleInfo[] = this.model;
             let text: string = biodeep.as_tabular(table);
-            
+
             return text;
         }
 
-        public constructor(public container: string, sampleNames: string[]) {
-            let raw = biodeep.buildModels(biodeep.guess_groupInfo(sampleNames));
+        public constructor(public container: string, sampleNames: string[] | IsampleInfo[]) {
+            let raw: IsampleInfo[]
+            let type = $ts.typeof(sampleNames);
 
-            $ts(container).clear();
-            $ts(container).appendElement(sampleInfo.createContextMenu());
-            $ts(container).appendElement(sampleInfo.createSampleInfotable(raw));
-
-            this.init();
-            this.sampleInfo = new Dictionary<HTMLTableRowElement[]>({});
-
-            let index: number = this.tableTitles.indexOf("sample_info");
-
-            for (let sample_group of $ts(this.trs).GroupBy(tr => tr.cells.item(index).innerText).ToArray(false)) {
-                this.sampleInfo.Add(sample_group.Key, sample_group.ToArray(false));
+            if (type.isArrayOf("string")) {
+                raw = biodeep.buildModels(biodeep.guess_groupInfo(<string[]>sampleNames));
+            } else {
+                raw = <IsampleInfo[]>sampleNames;
             }
 
+            $ts(container).clear();
+            $ts(container).appendElement(sampleInfoUI.createContextMenu());
+            $ts(container).appendElement(sampleInfoUI.createSampleInfotable(raw));
+
+            this.init();
             this.exitEditMode();
         }
 
@@ -146,9 +143,6 @@
                 for (let tr of selects.ToArray(false)) {
                     tr.getElementsByTagName("td").item(index).innerText = name;
                 }
-
-                vm.sampleInfo.Delete(name);
-                vm.sampleInfo.Add(name, <any>selects.ToArray(false));
 
                 vm.exitEditMode();
             }
