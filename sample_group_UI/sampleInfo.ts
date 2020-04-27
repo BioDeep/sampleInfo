@@ -1,18 +1,34 @@
+interface IsampleInfo {
 
-/**
- * UI class for create sample group information
-*/
-export class sampleInfo {
+    /**
+     * the unique id
+    */
+    ID: string;
+    /**
+     * the display title of the sample
+    */
+    sample_name: string;
+    /**
+     * the sample group name
+    */
+    sample_info: string;
+    /**
+     * injection order in LC-MS experiment, used for batch normalization only
+    */
+    injectionOrder: number;
+    /**
+     * the LC-MS experiment batch number
+    */
+    batch: number;
+    sample_info1?: string;
+    sample_info2?: string;
+    color: string;
+    color1?: string;
+    color2?: string;
 
-    private currentGroup: string = undefined;
+    shape: number;
+    shape1?: number;
+    shape2?: number;
 
-    init() {
-        let vm = this;
-
-        $ts("#sample_groups").onChange = function (e) {
-            vm.currentGroup = $ts.value("#sample_groups");
-            TypeScript.logging.log(vm.currentGroup, TypeScript.ConsoleColors.Cyan);
-        }
-    }
-
+    delete?: string;
 }
