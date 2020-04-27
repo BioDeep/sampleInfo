@@ -28,7 +28,7 @@
         public get csv(): string {
             let table: IsampleInfo[] = this.model;
             let text: string = biodeep.as_tabular(table);
-
+            
             return text;
         }
 

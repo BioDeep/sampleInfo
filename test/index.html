@@ -63,8 +63,16 @@
             // console.table(info);
 
             console.log(ui.csv);
+			
+			
+			$ts("#download_sampleinfo").onclick = function() {
+				DOM.download("sampleinfo.csv", $ts.csv.toUri(this.model));			
+			}
         })
+	
     </script>
+ 
+ <a href="javascript:void(0);" id="download_sampleinfo"></a>
  
 </body>
 </html>
