@@ -37,6 +37,8 @@
         private lastSelectedRow: HTMLTableRowElement;
         private trs: HTMLCollectionOf<HTMLTableRowElement>;
 
+        public editMode: boolean = true;
+
         /**
          * hook events
         */
@@ -45,7 +47,7 @@
 
             // disable text selection
             document.onselectstart = function () {
-                return false;
+                return !vm.editMode;
             }
 
             this.trs = (<HTMLTableElement>$ts("#sampleinfo").any)
@@ -54,27 +56,31 @@
 
             $ts(this.trs).ForEach(tr => tr.onmousedown = function () {
                 vm.RowClick(tr, false);
+                vm.editMode = true;
             })
 
-            this.registerContextMenu();
+            this.registerContextMenu();           
         }
 
         private registerContextMenu() {
             let menuDisplayed = false;
-            let menuBox = null;
+            let menuBox: HTMLElement = null;
+            let vm = this;
 
             window.addEventListener("contextmenu", function () {
-                let left = arguments[0].clientX;
-                let top = arguments[0].clientY;
+                if (vm.editMode) {
+                    let left = arguments[0].clientX;
+                    let top = arguments[0].clientY;
 
-                menuBox = window.document.querySelector(".menu");
-                menuBox.style.left = left + "px";
-                menuBox.style.top = top + "px";
-                menuBox.style.display = "block";
+                    menuBox = window.document.querySelector(".menu");
+                    menuBox.style.left = left + "px";
+                    menuBox.style.top = top + "px";
+                    menuBox.style.display = "block";
 
-                arguments[0].preventDefault();
+                    arguments[0].preventDefault();
 
-                menuDisplayed = true;
+                    menuDisplayed = true;
+                }
             }, false);
 
             window.addEventListener("click", function () {
@@ -82,6 +88,21 @@
                     menuBox.style.display = "none";
                 }
             }, true);
+
+            $ts("#add-group").onclick = function () {
+                vm.buildSampleInfo();
+            }
+            $ts("#exit-edit-mode").onclick = function () {
+                vm.editMode = false;
+            }
+        }
+
+        private buildSampleInfo() {
+            let selects = $ts.select(".selected");
+
+            $('#myModal').modal();  
+
+            console.log(selects);
         }
 
         RowClick(currenttr: HTMLTableRowElement, lock: boolean) {
@@ -119,7 +140,7 @@
             });
 
             for (var i = indexes[0]; i <= indexes[1]; i++) {
-                tr = this.trs[i - 1];
+                tr = this.trs[i];
 
                 if (!isNullOrUndefined(tr)) {
                     tr.classList.add('selected');
@@ -134,14 +155,14 @@
         }
 
         private static createSampleInfotable(model: biodeep.IsampleInfo[]): HTMLElement {
-            return $ts.evalHTML.table(model, null, { id: "sampleinfo", class: "sampleinfo" });
+            return $ts.evalHTML.table(model, null, { id: "sampleinfo", class: ["sampleinfo", "table"] });
         }
 
         private static createContextMenu(): HTMLElement {
             let div = $ts("<div>", { id: "context", class: "menu" });
 
-            div.appendElement($ts("<div>", { class: "menu-item" }).display("添加样本分组"));
-            div.appendElement($ts("<div>", { class: "menu-item" }).display("退出编辑模式"));
+            div.appendElement($ts("<div>", { class: "menu-item", id: "add-group" }).display("添加样本分组"));
+            div.appendElement($ts("<div>", { class: "menu-item", id: "exit-edit-mode" }).display("退出编辑模式"));
 
             return div;
         }

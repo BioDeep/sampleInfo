@@ -1,6 +1,12 @@
 /// <reference path="../../../build/linq.d.ts" />
 
-function loadSamples(sampleNames: string[]) {
+$ts(function () {
+    // initialize the web app style
+    biodeep.ui.doStyle();
+    biodeep.createInputModal();
+})
 
+
+function loadSamples(sampleNames: string[]) {
 
 }

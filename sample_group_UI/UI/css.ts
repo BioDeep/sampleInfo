@@ -6,10 +6,11 @@ namespace biodeep.ui {
         if (isNullOrUndefined($ts("#table-style"))) {
             htmlHead.appendElement($ts("<style>", {
                 id: "table-style"
-            }).display(`.selected {
+            }).display(`
+            .selected {
                 background-color: lightBlue;
-            }`)
-            );
+            }
+            `));
         }
 
         if (isNullOrUndefined($ts("#context-style"))) {
