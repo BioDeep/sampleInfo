@@ -1,17 +1,15 @@
 {
-  "name": "sample_group_ui",
+  "name": "linq.ts",
   "version": "0.0.0",
-  "description": "sample_group_UI",
-  "main": "app.js",
+  "description": "Data sequence Linq extension for TypeScript.",
+  "main": "linq.js",
   "author": {
-    "name": ""
-  },
-  "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean"
+    "name": "xieguigang"
   },
   "devDependencies": {
-    "@types/node": "^8.0.14",
-    "typescript": "^3.2.2"
+    "@types/node": "^6.14.9"
+  },
+  "dependencies": {
+    "npm": "^6.13.6"
   }
 }
