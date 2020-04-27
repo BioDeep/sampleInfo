@@ -5,23 +5,34 @@ namespace biodeep {
     */
     export class sampleInfo {
 
-        private currentGroup: string = undefined;
+        private sampleInfo: Dictionary<IsampleInfo[]>;
 
-        public constructor(public container: string) {
-            $ts(container)
-                .clear()
-                .appendElement($ts("<div>").display($ts("<select>", { id: "sample_groups" })));
+        public get model(): IsampleInfo[] {
+            return this.sampleInfo.Values.Unlist(a => a).ToArray(false);
         }
 
-        init() {
-            let vm = this;
+        public get csv(): string {
+            let table: IsampleInfo[] = this.model;
+            let text: string = biodeep.as_tabular(table);
 
-            $ts("#sample_groups").onchange = function (e) {
-                vm.currentGroup = $ts.value("#sample_groups");
-                TypeScript.logging.log(vm.currentGroup, TypeScript.ConsoleColors.Cyan);
-            }
+            return text;
         }
 
+        public constructor(public container: string, sampleNames: string[]) {
+            let raw = biodeep.buildModels(biodeep.guess_groupInfo(sampleNames));
+
+            $ts(container).clear();
+
+            this.sampleInfo = $from(raw)
+                .GroupBy(g => g.sample_info)
+                .ToDictionary(g => g.Key, g => g.ToArray(false));
+
+            console.log(this.sampleInfo.Object);
+        }
+
+        private createContextMenu() {
+
+        }
     }
 }
 

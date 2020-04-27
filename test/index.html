@@ -1,13 +1,210 @@
+<!doctype html>
+<html>
+    <head>
+        <script>
+            
+           
+        </script>
+        <style>
+            .menu
+            {
+                width: 150px;
+                box-shadow: 3px 3px 5px #888888;
+                border-style: solid;
+                border-width: 1px;
+                border-color: grey;
+                border-radius: 2px;
+                padding-left: 5px;
+                padding-right: 5px;
+                padding-top: 3px;
+                padding-bottom: 3px;
+                position: fixed;
+                display: none;
+				background-color: white;
+            }
+            
+            .menu-item
+            {
+                height: 20px;
+            }
+            
+            .menu-item:hover
+            {
+                background-color: #6CB5FF;
+                cursor: pointer;
+            }
+
+        </style>
+
+
 <script src="http://cdn.biodeep.cn:8848/typescripts/build/linq.js"></script>
 <script src="http://cdn.biodeep.cn:8848/typescripts/build/biodeep.sampleinfo.js"></script>
+<script src="http://cdn.biodeep.cn:8848/vendor/jquery.min.js"></script>
 
 
+<style>
+.selected {
+    background: lightBlue
+}
+</style>
+    </head>
+    <body>
+
+        <div id="context" class="menu">
+            <div class="menu-item">Share On Facebook</div>
+            <div class="menu-item">Share On Twitter</div>
+            <hr>
+            <div class="menu-item">Search On Google</div>
+            <div class="menu-item">Search On Bing</div>
+            <hr>
+            <div class="menu-item">Bookmark</div>
+        </div>
+		
 <div id="designer"></div>
 
+<div>
+
+<table id="tableStudent" border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Class</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr onmousedown="RowClick(this,false);">
+            <td>1</td>
+            <td>John</td>
+            <td>4th</td>
+        </tr>
+         <tr onmousedown="RowClick(this,false);">
+            <td>2</td>
+            <td>Jack</td>
+            <td>5th</td>
+        </tr>
+         <tr onmousedown="RowClick(this,false);">
+            <td>3</td>
+            <td>Michel</td>
+            <td>6th</td>
+        </tr>
+        <tr onmousedown="RowClick(this,false);">
+            <td>4</td>
+            <td>Mike</td>
+            <td>7th</td>
+        </tr>
+        <tr onmousedown="RowClick(this,false);">
+            <td>5</td>
+            <td>Yke</td>
+            <td>8th</td>
+        </tr>
+         <tr onmousedown="RowClick(this,false);">
+            <td>6</td>
+            <td>4ke</td>
+            <td>9th</td>
+        </tr>
+        <tr onmousedown="RowClick(this,false);">
+            <td>7</td>
+            <td>7ke</td>
+            <td>10th</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<script>
+var lastSelectedRow;
+var trs = document.getElementById('tableStudent').tBodies[0].getElementsByTagName('tr');
+
+// disable text selection
+document.onselectstart = function() {
+    return false;
+}
+
+function RowClick(currenttr, lock) {
+    if (window.event.ctrlKey) {
+        toggleRow(currenttr);
+    }
+
+    if (window.event.button === 0) {
+        if (!window.event.ctrlKey && !window.event.shiftKey) {
+            clearAll();
+            toggleRow(currenttr);
+        }
+
+        if (window.event.shiftKey) {
+            selectRowsBetweenIndexes([lastSelectedRow.rowIndex, currenttr.rowIndex])
+        }
+    }
+}
+
+function toggleRow(row) {
+    row.className = row.className == 'selected' ? '' : 'selected';
+    lastSelectedRow = row;
+}
+
+function selectRowsBetweenIndexes(indexes) {
+    indexes.sort(function(a, b) {
+        return a - b;
+    });
+
+    for (var i = indexes[0]; i <= indexes[1]; i++) {
+        trs[i-1].className = 'selected';
+    }
+}
+
+function clearAll() {
+    for (var i = 0; i < trs.length; i++) {
+        trs[i].className = '';
+    }
+}
+
+/*
+$(document).ready(function(){ 
+  document.oncontextmenu = function() {return false;};
+
+  $(document).mousedown(function(e){ 
+  
+    if( e.button == 2 ) { 
+       console.log(e);
+	  var x = e.clientX; 
+    var y = e.clientY; 
+    document.getElementById('context').style.marginLeft  = x+"px";
+    document.getElementById('context').style.marginTop  = y+"px";
+	  
+	  
+      return false; 
+    } 
+    return true; 
+  }); 
+});
+*/
+ var menuDisplayed = false;
+            var menuBox = null;
+            
+            window.addEventListener("contextmenu", function() {
+                var left = arguments[0].clientX;
+                var top = arguments[0].clientY;
+                
+                menuBox = window.document.querySelector(".menu");
+                menuBox.style.left = left + "px";
+                menuBox.style.top = top + "px";
+                menuBox.style.display = "block";
+                
+                arguments[0].preventDefault();
+                
+                menuDisplayed = true;
+            }, false);
+            
+            window.addEventListener("click", function() {
+                if(menuDisplayed == true){
+                    menuBox.style.display = "none"; 
+                }
+            }, true);
+
+</script>
 
 <script>
 $ts(function() {
-let ui = new biodeep.sampleInfo("#designer");
 let samplenames = [
 	"T202004_A01-1",
 "T202004_A01-2",
@@ -26,7 +223,9 @@ let samplenames = [
 "T202004_QC3"
 ];
 
-console.table(biodeep.buildModels(biodeep.guess_groupInfo(samplenames)));
+// console.table(biodeep.buildModels(biodeep.guess_groupInfo(samplenames)));
+
+let ui = new biodeep.sampleInfo("#designer", samplenames);
 
 samplenames = [
 "A01-1",
@@ -46,7 +245,19 @@ samplenames = [
 "QC3"
 ];
 
-console.table(biodeep.buildModels(biodeep.guess_groupInfo(samplenames)));
+// let info = biodeep.buildModels(biodeep.guess_groupInfo(samplenames));
+
+// console.table(info);
+
+console.log(ui.csv);
 
 })
 </script>
+
+
+
+
+
+
+    </body>
+</html>
