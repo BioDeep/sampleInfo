@@ -49,7 +49,7 @@ namespace biodeep {
                     sample_name: label,
                     sample_info: group.name,
                     injectionOrder: 0,
-                    batch: 0,
+                    batch: 1,
                     color: "000000",
                     shape: 19
                 });
@@ -64,7 +64,7 @@ namespace biodeep {
             sampleNames = (<IEnumerator<string>>sampleNames).ToArray();
         }
 
-        let common: string[];
+        let common: string[] = [];
         let column: string[];
         let unique: string[];
         let matrix: string[][] = $from(sampleNames).Select(s => <string[]>Strings.ToCharArray(s, false)).ToArray(false);
@@ -86,13 +86,9 @@ namespace biodeep {
                 for (let start of unique) {
                     let index = $from(column).Select(c => c == start).ToArray(false);
                     let part = $from(matrix).subset(index);
-                    let newCommon: string[] = [...common];
+                    let sampleGroup = splitOfGroupLabels([...common], i, part.ToArray(false));
 
-                    newCommon.push(start);
-
-                    for (let group of splitOfGroupLabels(newCommon, i, part.ToArray(false))) {
-                        groups.push(group);
-                    }
+                    groups.push(sampleGroup);
                 }
 
                 break;
@@ -105,11 +101,11 @@ namespace biodeep {
     /**
      * move to next untile get next different character 
     */
-    function splitOfGroupLabels(common: string[], i: number, matrix: string[][]): NamedValue<string[]>[] {
+    function splitOfGroupLabels(common: string[], i: number, matrix: string[][]): NamedValue<string[]> {
         let minLen: number = $from(matrix).Min(s => s.length).length;
         let column: string[];
         let unique: string[];
-        let groups: NamedValue<string[]>[] = [];
+        let labels = $from(matrix).Select(s => s.join("")).ToArray(false);
 
         for (; i < minLen; i++) {
             column = [];
@@ -123,19 +119,12 @@ namespace biodeep {
             if (unique.length == 1) {
                 common.push(unique[0]);
             } else {
-                for (let start of unique) {
-                    let index = $from(column).Select(c => c == start).ToArray(false);
-                    let labels = $from(matrix).subset(index).Select(s => s.join("")).ToArray(false);
-                    let groupName: string = common.join("") + start;
+                let groupLabel: string = Strings.RTrim(common.join(""), "-_.+&$#@!`~ ");
+                let info = new NamedValue<string[]>(groupLabel, labels);
 
-                    groups.push(new NamedValue<string[]>(groupName, labels));
-                }
-
-                break;
+                return info;
             }
         }
-
-        return groups;
     }
 }
 
