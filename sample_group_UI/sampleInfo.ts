@@ -49,6 +49,7 @@ namespace biodeep {
         let unique: string[];
         let matrix: string[][] = $from(sampleNames).Select(s => <string[]>Strings.ToCharArray(s, false)).ToArray(false);
         let minLen: number = $from(matrix).Min(s => s.length).length;
+        let groups: NamedValue<string[]>[] = [];
 
         for (let i = 0; i < minLen; i++) {
             column = [];
@@ -62,9 +63,59 @@ namespace biodeep {
             if (unique.length == 1) {
                 common.push(unique[0]);
             } else {
-                
+                for (let start of unique) {
+                    let index = $from(column).Select(c => c == start).ToArray(false);
+                    let part = $from(matrix).subset(index);
+                    let newCommon: string[] = [...common];
+
+                    newCommon.push(start);
+
+                    for (let group of splitOfGroupLabels(newCommon, i, part.ToArray(false))) {
+                        groups.push(group);
+                    }
+                }
+
+                break;
             }
         }
+
+        return groups;
+    }
+
+    /**
+     * move to next untile get next different character 
+    */
+    function splitOfGroupLabels(common: string[], i: number, matrix: string[][]): NamedValue<string[]>[] {
+        let minLen: number = $from(matrix).Min(s => s.length).length;
+        let column: string[];
+        let unique: string[];
+        let groups: NamedValue<string[]>[] = [];
+
+        for (; i < minLen; i++) {
+            column = [];
+
+            for (let name of matrix) {
+                column.push(name[i]);
+            }
+
+            unique = $from(column).Distinct().ToArray(false);
+
+            if (unique.length == 1) {
+                common.push(unique[0]);
+            } else {
+                for (let start of unique) {
+                    let index = $from(column).Select(c => c == start).ToArray(false);
+                    let labels = $from(matrix).subset(index).Select(s => s.join("")).ToArray(false);
+                    let groupName: string = common.join("") + start;
+
+                    groups.push(new NamedValue<string[]>(groupName, labels));
+                }
+
+                break;
+            }
+        }
+
+        return groups;
     }
 }
 
