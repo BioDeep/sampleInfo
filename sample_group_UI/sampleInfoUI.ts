@@ -56,12 +56,16 @@
                 vm.RowClick(tr, false);
             })
 
-            var menuDisplayed = false;
-            var menuBox = null;
+            this.registerContextMenu();
+        }
+
+        private registerContextMenu() {
+            let menuDisplayed = false;
+            let menuBox = null;
 
             window.addEventListener("contextmenu", function () {
-                var left = arguments[0].clientX;
-                var top = arguments[0].clientY;
+                let left = arguments[0].clientX;
+                let top = arguments[0].clientY;
 
                 menuBox = window.document.querySelector(".menu");
                 menuBox.style.left = left + "px";
