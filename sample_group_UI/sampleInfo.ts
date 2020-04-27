@@ -39,6 +39,26 @@ namespace biodeep {
         return $ts.csv.toText(sampleInfo, false);
     }
 
+    export function buildModels(guessInfo: NamedValue<string[]>[]): IsampleInfo[] {
+        let data: IsampleInfo[] = [];
+
+        for (let group of guessInfo) {
+            for (let label of group.value) {
+                data.push(<IsampleInfo>{
+                    ID: label,
+                    sample_name: label,
+                    sample_info: group.name,
+                    injectionOrder: 0,
+                    batch: 0,
+                    color: "000000",
+                    shape: 19
+                });
+            }
+        }
+
+        return data;
+    }
+
     export function guess_groupInfo(sampleNames: string[] | IEnumerator<string>): NamedValue<string[]>[] {
         if (!Array.isArray(sampleNames)) {
             sampleNames = (<IEnumerator<string>>sampleNames).ToArray();
