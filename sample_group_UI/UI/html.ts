@@ -47,12 +47,14 @@
             for (let sample_group of $ts(this.trs).GroupBy(tr => tr.cells.item(index).innerText).ToArray(false)) {
                 this.sampleInfo.Add(sample_group.Key, sample_group.ToArray(false));
             }
+
+            this.exitEditMode();
         }
 
         private lastSelectedRow: HTMLTableRowElement;
         private trs: HTMLCollectionOf<HTMLTableRowElement>;
 
-        public editMode: boolean = true;
+        public editMode: boolean = false;
 
         /**
          * hook events
@@ -115,8 +117,16 @@
                 vm.buildSampleInfo();
             }
             $ts("#exit-edit-mode").onclick = function () {
-                vm.editMode = false;
+                vm.exitEditMode();
             }
+        }
+
+        private exitEditMode() {
+            for (let i = 0; i < this.trs.length; i++) {
+                this.trs.item(i).classList.remove("selected");
+            }
+
+            this.editMode = false;
         }
 
         private buildSampleInfo() {
@@ -124,9 +134,14 @@
             let vm = this;
 
             $('#myModal').modal();
+            $input("#sample-groupName").value = null;
             $ts("#group_checked").onclick = function () {
                 let name: string = $ts.value("#sample-groupName");
                 let index: number = vm.tableTitles.indexOf("sample_info");
+
+                if (Strings.Empty(name)) {
+                    return;
+                }
 
                 for (let tr of selects.ToArray(false)) {
                     tr.getElementsByTagName("td").item(index).innerText = name;
@@ -134,6 +149,8 @@
 
                 vm.sampleInfo.Delete(name);
                 vm.sampleInfo.Add(name, <any>selects.ToArray(false));
+
+                vm.exitEditMode();
             }
         }
 

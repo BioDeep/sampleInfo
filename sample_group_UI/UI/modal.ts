@@ -14,7 +14,7 @@
                 <h4 class="modal-title" id="myModalLabel">设置分组名称</h4>  
             </div>  
             <div class="modal-body">  
-                <p><input id="sample-groupName" type="text" class="form-control"></input></p>  
+                <p><input id="sample-groupName" type="text" class="form-control" placeholder="请在这里输入样本分组名称"></input></p>  
             </div>  
             <div class="modal-footer">  
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>  
