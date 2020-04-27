@@ -1,118 +1,101 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
-    <head>
- <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<meta name='renderer' content='webkit' />
-        <style>
-            .menu
-            {
-                width: 150px;
-                box-shadow: 3px 3px 5px #888888;
-                border-style: solid;
-                border-width: 1px;
-                border-color: grey;
-                border-radius: 2px;
-                padding-left: 5px;
-                padding-right: 5px;
-                padding-top: 3px;
-                padding-bottom: 3px;
-                position: fixed;
-                display: none;
-				background-color: white;
-            }
-            
-            .menu-item
-            {
-                height: 20px;
-            }
-            
-            .menu-item:hover
-            {
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name='renderer' content='webkit' />
+    <style>
+        .menu {
+            width: 150px;
+            box-shadow: 3px 3px 5px #888888;
+            border-style: solid;
+            border-width: 1px;
+            border-color: grey;
+            border-radius: 2px;
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            position: fixed;
+            display: none;
+            background-color: white;
+        }
+
+        .menu-item {
+            height: 20px;
+        }
+
+            .menu-item:hover {
                 background-color: #6CB5FF;
                 cursor: pointer;
             }
-
-        </style>
-
-
-<script src="http://cdn.biodeep.cn:8848/typescripts/build/linq.js"></script>
-<script src="http://cdn.biodeep.cn:8848/typescripts/build/biodeep.sampleinfo.js"></script>
-<script src="http://cdn.biodeep.cn:8848/vendor/jquery.min.js"></script>
-<link rel="stylesheet" href="http://cdn.biodeep.cn:8848/styles/bootstrap-3.3.7/dist/css/bootstrap.min.css" />
-<script type="text/javascript" src="http://cdn.biodeep.cn:8848/styles/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
-
-<style>
-.selected {
-    background: lightBlue
-}
-</style>
-    </head>
-    <body>
-
-	
-<div id="designer"></div>
+    </style>
 
 
+    <script src="http://cdn.biodeep.cn:8848/typescripts/build/linq.js"></script>
+    <script src="http://cdn.biodeep.cn:8848/typescripts/build/biodeep.sampleinfo.js"></script>
+    <script src="http://cdn.biodeep.cn:8848/vendor/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.biodeep.cn:8848/styles/bootstrap-3.3.7/dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="http://cdn.biodeep.cn:8848/styles/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
 
+    <style>
+        .selected {
+            background: lightBlue
+        }
+    </style>
+</head>
+<body>
+    <div id="designer"></div>
 
-<div>
-<script>
-$ts(function() {
-let samplenames = [
-	"T202004_A01-1",
-"T202004_A01-2",
-"T202004_A01-3",
-"T202004_A01-4",
-"T202004_A01-5",
-"T202004_A01-6",
-"T202004_CK1",
-"T202004_CK2",
-"T202004_CK3",
-"T202004_CK4",
-"T202004_CK5",
-"T202004_CK6",
-"T202004_QC1",
-"T202004_QC2",
-"T202004_QC3"
-];
+    <script>
+        $ts(function () {
+            let samplenames = [
+                "T202004_A01-1",
+                "T202004_A01-2",
+                "T202004_A01-3",
+                "T202004_A01-4",
+                "T202004_A01-5",
+                "T202004_A01-6",
+                "T202004_CK1",
+                "T202004_CK2",
+                "T202004_CK3",
+                "T202004_CK4",
+                "T202004_CK5",
+                "T202004_CK6",
+                "T202004_QC1",
+                "T202004_QC2",
+                "T202004_QC3"
+            ];
 
-// console.table(biodeep.buildModels(biodeep.guess_groupInfo(samplenames)));
+            // console.table(biodeep.buildModels(biodeep.guess_groupInfo(samplenames)));
 
-let ui = new biodeep.sampleInfo("#designer", samplenames);
+            let ui = new biodeep.sampleInfo("#designer", samplenames);
 
-samplenames = [
-"A01-1",
-"A01-2",
-"A01-3",
-"A01-4",
-"A01-5",
-"A01-6",
-"CK1",
-"CK2",
-"CK3",
-"CK4",
-"CK5",
-"CK6",
-"QC1",
-"QC2",
-"QC3"
-];
+            samplenames = [
+                "A01-1",
+                "A01-2",
+                "A01-3",
+                "A01-4",
+                "A01-5",
+                "A01-6",
+                "CK1",
+                "CK2",
+                "CK3",
+                "CK4",
+                "CK5",
+                "CK6",
+                "QC1",
+                "QC2",
+                "QC3"
+            ];
 
-// let info = biodeep.buildModels(biodeep.guess_groupInfo(samplenames));
+            // let info = biodeep.buildModels(biodeep.guess_groupInfo(samplenames));
 
-// console.table(info);
+            // console.table(info);
 
-console.log(ui.csv);
-
-})
-</script>
-
-
-
-
-
-
-    </body>
+            console.log(ui.csv);
+        })
+    </script>
+</body>
 </html>
