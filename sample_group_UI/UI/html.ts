@@ -57,6 +57,8 @@
             })
 
             this.registerContextMenu();
+
+            biodeep.ui.doStyle();
         }
 
         private registerContextMenu() {
