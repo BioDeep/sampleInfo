@@ -5,10 +5,24 @@
     */
     export class sampleInfo {
 
-        private sampleInfo: Dictionary<IsampleInfo[]>;
+        private sampleInfo: Dictionary<HTMLTableRowElement[]>;
+        private tableTitles: string[];
 
         public get model(): IsampleInfo[] {
-            return this.sampleInfo.Values.Unlist(a => a).ToArray(false);
+            let vm = this;
+
+            return this.sampleInfo.Values
+                .Unlist(a => a)
+                .Select(function (tr) {
+                    let sample: IsampleInfo = <IsampleInfo>{};
+                    let cells = tr.getElementsByTagName("td");
+
+                    for (let title of vm.tableTitles) {
+                        sample[title] = cells.item(vm.tableTitles.indexOf(title)).innerText;
+                    }
+
+                    return sample;
+                }).ToArray(false);
         }
 
         public get csv(): string {
@@ -21,15 +35,11 @@
         public constructor(public container: string, sampleNames: string[]) {
             let raw = biodeep.buildModels(biodeep.guess_groupInfo(sampleNames));
 
-            this.sampleInfo = $from(raw)
-                .GroupBy(g => g.sample_info)
-                .ToDictionary(g => g.Key, g => g.ToArray(false));
-
             $ts(container).clear();
             $ts(container).appendElement(sampleInfo.createContextMenu());
-            $ts(container).appendElement(sampleInfo.createSampleInfotable(this.model));
+            $ts(container).appendElement(sampleInfo.createSampleInfotable(raw));
 
-            console.log(this.sampleInfo.Object);
+            // console.log(this.sampleInfo.Object);
 
             this.init();
         }
@@ -53,13 +63,20 @@
             this.trs = (<HTMLTableElement>$ts("#sampleinfo").any)
                 .tBodies[0]
                 .getElementsByTagName("tr");
+            this.tableTitles = $ts(
+                (<HTMLTableElement>$ts("#sampleinfo").any)
+                    .tHead
+                    .getElementsByTagName("th")
+            )
+                .Select(th => th.innerText)
+                .ToArray(false);
 
             $ts(this.trs).ForEach(tr => tr.onmousedown = function () {
                 vm.RowClick(tr, false);
                 vm.editMode = true;
             })
 
-            this.registerContextMenu();           
+            this.registerContextMenu();
         }
 
         private registerContextMenu() {
@@ -99,10 +116,20 @@
 
         private buildSampleInfo() {
             let selects = $ts.select(".selected");
+            let vm = this;
 
-            $('#myModal').modal();  
+            $('#myModal').modal();
+            $ts("#group_checked").onclick = function () {
+                let name: string = $ts.value("#sample-groupName");
+                let index: number = vm.tableTitles.indexOf("sample_info");
 
-            console.log(selects);
+                for (let tr of selects.ToArray(false)) {
+                    tr.getElementsByTagName("td").item(index).innerText = name;
+                }
+
+                vm.sampleInfo.Delete(name);
+                vm.sampleInfo.Add(name, <any>selects.ToArray(false));
+            }
         }
 
         RowClick(currenttr: HTMLTableRowElement, lock: boolean) {
