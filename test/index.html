@@ -5,33 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name='renderer' content='webkit' />
-    <style>
-        .menu {
-            width: 150px;
-            box-shadow: 3px 3px 5px #888888;
-            border-style: solid;
-            border-width: 1px;
-            border-color: grey;
-            border-radius: 2px;
-            padding-left: 5px;
-            padding-right: 5px;
-            padding-top: 3px;
-            padding-bottom: 3px;
-            position: fixed;
-            display: none;
-            background-color: white;
-        }
-
-        .menu-item {
-            height: 20px;
-        }
-
-            .menu-item:hover {
-                background-color: #6CB5FF;
-                cursor: pointer;
-            }
-    </style>
-
 
     <script src="http://cdn.biodeep.cn:8848/typescripts/build/linq.js"></script>
     <script src="http://cdn.biodeep.cn:8848/typescripts/build/biodeep.sampleinfo.js"></script>
@@ -43,6 +16,8 @@
     <div id="designer"></div>
 
     <script>
+	            biodeep.ui.doStyle();
+				
 		$ts.mode = Modes.debug;
         $ts(function () {
             let samplenames = [
