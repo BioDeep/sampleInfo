@@ -3,7 +3,7 @@ namespace biodeep {
     export function createUI(handler: addDesign): HTMLElement {
         let all = $ts("<li>")
             .appendElement($ts("<h3>", { class: "cen" }).display("所有样本分组"))
-            .appendElement($ts("<p>", { class: "attentionLis" }).display("按住Ctrl多选"))
+            .appendElement($ts("<p>", { class: "attentionLis" }).display("单击选中，再次单击可以取消选择"))
             .appendElement($ts("<div>", { id: "all_groups" }));
         let action = $ts("<li>", { class: "groEnt" })
             .display($ts("<a>", {
