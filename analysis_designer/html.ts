@@ -1,7 +1,7 @@
 namespace biodeep {
 
     export function createUI(handler: addDesign): HTMLElement {
-        let all = $ts("<li>")
+        let all = $ts("<li>", { class: "firstLi" })
             .appendElement($ts("<h3>", { class: "cen" }).display("所有样本分组"))
             .appendElement($ts("<p>", { class: "attentionLis" }).display("单击选中，再次单击可以取消选择"))
             .appendElement($ts("<div>", { id: "all_groups" }));
@@ -16,7 +16,7 @@ namespace biodeep {
                 "aria-hidden": true
             }))
             );
-        let designerList = $ts("<li>")
+        let designerList = $ts("<li>", { class: "lastLi" })
             .appendElement($ts("<h3>", { class: "cen" }).display("已选组别比对"))
             .appendElement($ts("<p>", { class: "attentionLis" }).display("拖动组内排序"))
             .appendElement($ts("<div>", { id: "designs" }));
@@ -54,7 +54,7 @@ namespace biodeep {
             container.removeChild(designDiv);
             handleUpdate();
         }
-
+        ul.appendElement(remove)
         for (let label of labels) {
             ul.appendElement($ts("<div>", {
                 class: ["widget_group", "ui-sortable-handle"],
@@ -65,6 +65,6 @@ namespace biodeep {
         return designDiv
             .appendElement(iscurrent)
             .appendElement(ul)
-            .appendElement(remove);
+            //.appendElement(remove);
     }
 }

@@ -1,7 +1,8 @@
 namespace biodeep {
 
     export function loadStyle() {
-        let css = $ts("<style>").display(`.widget_group {
+        let css = $ts("<style>").display(
+`.widget_group {
     border-radius: 5px;
     padding: 5px 30px 5px 20px;
     margin-bottom: 10px;
@@ -32,7 +33,23 @@ div.ui-selected {
 ul.ui-sortable {
     float: left;
 }
-
+.groupCount {
+    display: flex;
+    justify-content: space-between;
+}
+.firstLi,
+.lastLi {
+    width: 45%;
+    border: 1px solid #03a9f4;
+}
+h3,p {
+    text-align: center;
+}
+.groEnt {
+    width: 5%;
+    text-align: center;
+    margin-top: 10%;
+}
 `);
         $ts("&head").appendElement(css);
     }

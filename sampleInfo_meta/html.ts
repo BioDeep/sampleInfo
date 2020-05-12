@@ -33,7 +33,7 @@ namespace biodeep {
     export class metaEditor {
 
         public constructor(public sampleMeta: IsampleMeta[], div: string) {
-            let table = $ts("<table>", { class: "table" });
+            let table: IHTMLElement = $ts("<table>", { class: "table" });
             let header = $ts("<thead>").appendElement(
                 $ts("<tr>")
                     .appendElement($ts("<th>").display("分组名称"))
@@ -84,7 +84,10 @@ namespace biodeep {
     function colorSetter(label: string, _default: string, setValue: Delegate.Sub) {
         let opt = $ts("<select>", {
             onchange: function () {
-                setValue(label, (<HTMLSelectElement><any>opt).value);
+                let colorVal: string = (<HTMLSelectElement><any>opt).value;
+
+                opt.style.backgroundColor = colorVal;
+                setValue(label, colorVal);
             },
             value: _default
         });
