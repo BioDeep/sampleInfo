@@ -1,5 +1,8 @@
 /// <reference path="../../../build/linq.d.ts" />
 
+/// <reference path="html.ts" />
+/// <reference path="css.ts" />
+
 interface analysisDesign {
     groups: string[];
 }

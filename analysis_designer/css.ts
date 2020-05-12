@@ -1,9 +1,7 @@
 namespace biodeep {
 
     export function loadStyle() {
-        let css = $ts("<style>", { type: "style/css" });
-
-        css.innerText = `.widget_group {
+        let css = $ts("<style>").display(`.widget_group {
     border-radius: 5px;
     padding: 5px 30px 5px 20px;
     margin-bottom: 10px;
@@ -15,7 +13,7 @@ namespace biodeep {
     float: left;
     cursor: pointer;
     position: relative;
-}`;
+}`);
         $ts("&head").appendElement(css);
     }
 }
