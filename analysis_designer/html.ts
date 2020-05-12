@@ -1,6 +1,6 @@
 namespace biodeep {
 
-    export function createUI(handler: updateDesigns): HTMLElement {
+    export function createUI(handler: addDesign): HTMLElement {
         let all = $ts("<li>")
             .appendElement($ts("<h3>", { class: "cen" }).display("所有样本分组"))
             .appendElement($ts("<p>", { class: "attentionLis" }).display("按住Ctrl多选"))
@@ -9,7 +9,7 @@ namespace biodeep {
             .display($ts("<a>", {
                 href: executeJavaScript,
                 onclick: function () {
-                    handler(getCurrentDesigns());
+                    handler(getDeisgnerLabels());
                 }
             }).display($ts("<i>", {
                 class: ["fa", "fa-arrow-right"],
@@ -29,17 +29,9 @@ namespace biodeep {
             .appendElement(designerList);
     }
 
-    function getCurrentDesigns(): analysisDesign[] {
-        return $ts($ts("#designs").getElementsByTagName("div"))
-            .Select(a => getDesign(a))
+    function getDeisgnerLabels(): string[] {
+        return $ts($ts("#all_groups").getElementsByTagName("div"))
+            .Select(div => div.getAttribute("data-target"))
             .ToArray(false);
-    }
-
-    function getDesign(label: HTMLElement): analysisDesign {
-        let labels: string[] = JSON.parse(label.getAttribute("data"));
-
-        return <analysisDesign>{
-            groups: labels
-        }
     }
 }

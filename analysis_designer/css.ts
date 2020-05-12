@@ -13,7 +13,16 @@ namespace biodeep {
     float: left;
     cursor: pointer;
     position: relative;
-}`);
+}
+
+div.ui-selected {
+    -webkit-transition: border linear .2s,-webkit-box-shadow linear .5s;
+    border-color: rgba(141,39,142,.75);
+    -webkit-box-shadow: 0 0 18px rgba(111, 1, 32, 1);
+    border: 1px solid red;
+    background-color: #F39814;
+}
+`);
         $ts("&head").appendElement(css);
     }
 }

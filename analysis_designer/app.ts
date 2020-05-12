@@ -8,6 +8,7 @@ interface analysisDesign {
 }
 
 interface updateDesigns { (current: analysisDesign[]): void; }
+interface addDesign { (labels: string[]): void; }
 
 $ts(biodeep.loadStyle);
 
@@ -18,19 +19,18 @@ function loadDesigner(id: string, groups: string[], currentDesigns: analysisDesi
     let labelContainer: IHTMLElement;
     let designContainer: IHTMLElement;
 
-    $ts(id).clear().appendElement(biodeep.createUI(isNullOrUndefined(handler) ? DoNothing : handler));
+    $ts(id).clear().appendElement(biodeep.createUI(biodeep.UI_events.handlerEvent(handler)));
 
     labelContainer = $ts("#all_groups");
     designContainer = $ts("#designs");
 
     for (let label of groups) {
-        labelContainer.appendElement($ts("<div>", {
-            class: ["widget_group"],
-            "data-target": label
-        }).display(label));
+        labelContainer.appendElement(biodeep.UI_events.doLabeler(label));
     }
 
     for (let design of currentDesigns) {
 
     }
 }
+
+
