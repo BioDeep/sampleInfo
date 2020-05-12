@@ -6,12 +6,16 @@ namespace biodeep {
             .appendElement($ts("<p>", { class: "attentionLis" }).display("按住Ctrl多选"))
             .appendElement($ts("<div>", { id: "all_groups" }));
         let action = $ts("<li>", { class: "groEnt" })
-            .display($ts("<i>", {
-                class: [],
+            .display($ts("<a>", {
+                href: executeJavaScript,
                 onclick: function () {
                     handler(getCurrentDesigns());
                 }
-            }));
+            }).display($ts("<i>", {
+                class: ["fa", "fa-arrow-right"],
+                "aria-hidden": true
+            }))
+            );
         let designerList = $ts("<li>")
             .appendElement($ts("<h3>", { class: "cen" }).display("已选组别比对"))
             .appendElement($ts("<p>", { class: "attentionLis" }).display("拖动组内排序"))
