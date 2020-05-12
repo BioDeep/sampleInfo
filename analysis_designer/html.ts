@@ -31,7 +31,40 @@ namespace biodeep {
 
     function getDeisgnerLabels(): string[] {
         return $ts($ts("#all_groups").getElementsByTagName("div"))
+            .Where(div => div.classList.contains("ui-selected"))
             .Select(div => div.getAttribute("data-target"))
             .ToArray(false);
+    }
+
+    export function analysisDesignItem(labels: string[], container: HTMLElement, handleUpdate: Delegate.Action): HTMLElement {
+        let designDiv = $ts("<div>", {
+            class: "samplegroup-div",
+            "data-target": JSON.stringify(labels)
+        });
+        let iscurrent = $ts("<div>", { class: "radio-iscurrent" });
+        let ul = $ts("<ul>", { class: "ui-sortable" });
+        let remove = $ts("<a>", {
+            href: executeJavaScript
+        }).display($ts("<i>", {
+            class: ["fa", "fa-times"],
+            style: "line-height: 52px;color:red;font-size: 20px;"
+        }));
+
+        remove.onclick = function () {
+            container.removeChild(designDiv);
+            handleUpdate();
+        }
+
+        for (let label of labels) {
+            ul.appendElement($ts("<div>", {
+                class: ["widget_group", "ui-sortable-handle"],
+                "data-target": label
+            }).display(label));
+        }
+
+        return designDiv
+            .appendElement(iscurrent)
+            .appendElement(ul)
+            .appendElement(remove);
     }
 }

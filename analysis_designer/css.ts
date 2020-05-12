@@ -22,6 +22,17 @@ div.ui-selected {
     border: 1px solid red;
     background-color: #F39814;
 }
+
+.radio-iscurrent {
+    float: left;
+    padding-top: 13px;
+    margin-right: 5px;
+}
+
+ul.ui-sortable {
+    float: left;
+}
+
 `);
         $ts("&head").appendElement(css);
     }
