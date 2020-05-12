@@ -9,6 +9,8 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Linq.ts", "..\..\Linq.js\LI
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "analysis_designer", "analysis_designer\analysis_designer.njsproj", "{BF723ED4-3863-455F-963D-AFD56A930CB3}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "sampleInfo_meta", "sampleInfo_meta\sampleInfo_meta.njsproj", "{91D56C54-97E5-44C5-A70A-EEF195C95F76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BF723ED4-3863-455F-963D-AFD56A930CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF723ED4-3863-455F-963D-AFD56A930CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF723ED4-3863-455F-963D-AFD56A930CB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91D56C54-97E5-44C5-A70A-EEF195C95F76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91D56C54-97E5-44C5-A70A-EEF195C95F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91D56C54-97E5-44C5-A70A-EEF195C95F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91D56C54-97E5-44C5-A70A-EEF195C95F76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
