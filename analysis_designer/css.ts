@@ -37,6 +37,9 @@ ul.ui-sortable {
     display: flex;
     justify-content: space-between;
 }
+#all_groups {
+    padding: 0 10px;
+}
 .firstLi,
 .lastLi {
     width: 45%;
@@ -50,6 +53,18 @@ h3,p {
     text-align: center;
     margin-top: 10%;
 }
+.groEnt a {
+    font-size: 36px;
+}
+.samplegroup-div {
+    padding: 0 10px;
+    margin-bottom: 15px;
+}
+.ui-sortable {
+    border: 1px dashed #03a9f4;
+    padding: 0 10px;
+}
+
 `);
         $ts("&head").appendElement(css);
     }

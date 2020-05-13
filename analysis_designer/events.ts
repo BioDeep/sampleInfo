@@ -18,7 +18,7 @@ namespace biodeep.UI_events {
                 if (!$ts(getCurrentDesigns())
                     .Any(function (a) {
                         // 跳过已经存在的比对组别
-                        return a.groups.length == $ts([...a.groups].concat([...labels])).Distinct().Count;
+                        return a.groups == $ts([...a.group_info].concat([...labels])).Distinct().Count;
                     })) {
 
                     let designContainer = $ts("#designs")
@@ -66,7 +66,9 @@ namespace biodeep.UI_events {
         let labels: string[] = JSON.parse(label.getAttribute("data-target"));
 
         return <analysisDesign>{
-            groups: labels
+            groups: labels.length,
+            group_info: labels,
+            label: labels.join(" vs ")
         }
     }
 }

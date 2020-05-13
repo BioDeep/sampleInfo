@@ -4,7 +4,15 @@
 /// <reference path="css.ts" />
 
 interface analysisDesign {
-    groups: string[];
+    /**
+     * 比对的组别数量
+    */
+    groups: number;
+    /**
+     * 比对的组别的编号
+    */
+    label: string;
+    group_info: string[];
 }
 
 interface updateDesigns { (current: analysisDesign[]): void; }
@@ -31,6 +39,9 @@ function loadDesigner(id: string, groups: string[], currentDesigns: analysisDesi
     for (let design of currentDesigns) {
 
     }
+    
 }
-
+(function () {
+    $ts(".myProjectNav").addClass("myProColor")
+})();
 

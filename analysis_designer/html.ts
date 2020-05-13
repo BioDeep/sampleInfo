@@ -1,10 +1,10 @@
 namespace biodeep {
 
     export function createUI(handler: addDesign): HTMLElement {
-        let all = $ts("<li>", { class: "firstLi" })
+        let all = $ts("<li>", { class: ["firstLi", "clearfix"] })
             .appendElement($ts("<h3>", { class: "cen" }).display("所有样本分组"))
             .appendElement($ts("<p>", { class: "attentionLis" }).display("单击选中，再次单击可以取消选择"))
-            .appendElement($ts("<div>", { id: "all_groups" }));
+            .appendElement($ts("<div>", { class: "clearfix", id: "all_groups" }));
         let action = $ts("<li>", { class: "groEnt" })
             .display($ts("<a>", {
                 href: executeJavaScript,
@@ -19,7 +19,7 @@ namespace biodeep {
         let designerList = $ts("<li>", { class: "lastLi" })
             .appendElement($ts("<h3>", { class: "cen" }).display("已选组别比对"))
             .appendElement($ts("<p>", { class: "attentionLis" }).display("拖动组内排序"))
-            .appendElement($ts("<div>", { id: "designs" }));
+            .appendElement($ts("<div>", { class: "clearfix", id: "designs" }));
 
         return $ts("<ul>", {
             class: "groupCount"
@@ -38,11 +38,11 @@ namespace biodeep {
 
     export function analysisDesignItem(labels: string[], container: HTMLElement, handleUpdate: Delegate.Action): HTMLElement {
         let designDiv = $ts("<div>", {
-            class: "samplegroup-div",
+            class: ["samplegroup-div", "clearfix"],
             "data-target": JSON.stringify(labels)
         });
         let iscurrent = $ts("<div>", { class: "radio-iscurrent" });
-        let ul = $ts("<ul>", { class: "ui-sortable" });
+        let ulDiv = $ts("<div>", { class: ["ui-sortable", "clearfix"] });
         let remove = $ts("<a>", {
             href: executeJavaScript
         }).display($ts("<i>", {
@@ -54,17 +54,17 @@ namespace biodeep {
             container.removeChild(designDiv);
             handleUpdate();
         }
-        ul.appendElement(remove)
+        
         for (let label of labels) {
-            ul.appendElement($ts("<div>", {
+            ulDiv.appendElement($ts("<div>", {
                 class: ["widget_group", "ui-sortable-handle"],
                 "data-target": label
             }).display(label));
         }
-
+        ulDiv.appendChild(remove)
         return designDiv
             .appendElement(iscurrent)
-            .appendElement(ul)
+            .appendElement(ulDiv)
             //.appendElement(remove);
     }
 }
