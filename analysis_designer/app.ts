@@ -5,11 +5,11 @@
 
 interface analysisDesign {
     /**
-     * ±È¶ÔµÄ×é±ğÊıÁ¿
+     * æ¯”å¯¹çš„ç»„åˆ«æ•°é‡
     */
     groups: number;
     /**
-     * ±È¶ÔµÄ×é±ğµÄ±àºÅ
+     * æ¯”å¯¹çš„ç»„åˆ«çš„ç¼–å·
     */
     label: string;
     group_info: string[];
@@ -36,10 +36,18 @@ function loadDesigner(id: string, groups: string[], currentDesigns: analysisDesi
         labelContainer.appendElement(biodeep.UI_events.doLabeler(label));
     }
 
-    for (let design of currentDesigns) {
+    let labels: string[];
+    let handleUpdate: Delegate.Action;
 
+    handler = isNullOrUndefined(handler) ? DoNothing : handler;
+    handleUpdate = function () {
+        handler(biodeep.UI_events.getCurrentDesigns());
     }
-    
+
+    for (let design of currentDesigns) {
+        labels = design.group_info;
+        designContainer.appendElement(biodeep.analysisDesignItem(labels, designContainer, handleUpdate));
+    }    
 }
 (function () {
     $ts(".myProjectNav").addClass("myProColor")

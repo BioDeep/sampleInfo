@@ -61,7 +61,8 @@ namespace biodeep {
                 "data-target": label
             }).display(label));
         }
-        ulDiv.appendChild(remove)
+        ulDiv.appendChild(remove);
+
         return designDiv
             .appendElement(iscurrent)
             .appendElement(ulDiv)
