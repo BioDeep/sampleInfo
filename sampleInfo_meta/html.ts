@@ -18,16 +18,16 @@ namespace biodeep {
         "#000000"
     ];
     const shapes: {} = {
-        shape1: "●",
-        shape2: "■",
-        shape3: "◆",
-        shape4: "▲",
-        shape5: "▼",
-        shape6: "○",
-        shape7: "□",
-        shape8: "◇",
-        shape9: "△",
-        default: "▽"
+        shape21: "●",
+        shape22: "■",
+        shape23: "◆",
+        shape24: "▲",
+        shape25: "▼",
+        shape1: "○",
+        shape0: "□",
+        shape5: "◇",
+        shape2: "△",
+        shape6: "▽"
     };
 
     export class metaEditor {
@@ -44,6 +44,13 @@ namespace biodeep {
             let row: IHTMLElement;
 
             for (let meta of sampleMeta) {
+                if (Strings.Empty(meta.color, true)) {
+                    meta.color = "ee3333";
+                }
+                if (Strings.Empty(`${meta.shape}`, true)) {
+                    meta.shape = 0;
+                }
+
                 row = $ts("<tr>");
                 row.appendElement($ts("<td>").display(meta.sampleInfo));
                 row.appendElement($ts("<td>").display(colorSetter(meta.sampleInfo, meta.color, <any>((label, value) => this.colorSetter(label, value)))));
@@ -69,14 +76,28 @@ namespace biodeep {
     function shapeSetter(label: string, _default: string, setValue: Delegate.Sub) {
         let opt = $ts("<select>", {
             onchange: function () {
-                setValue(label, (<HTMLSelectElement><any>opt).value);
-            },
-            value: _default
+                let strVal: string = (<HTMLSelectElement><any>opt).value;
+
+                strVal = strVal.match(/\d+/g)[0];
+                setValue(label, strVal);
+            }
         });
+        let index = 0;
+        let i = 0;
+
+        _default = Strings.Empty(_default, true) ? "shape0" : ("shape" + _default);
 
         for (let name in shapes) {
             opt.appendElement($ts("<option>", { value: name }).display(shapes[name]));
+
+            if (name == _default) {
+                index = i;
+            } else {
+                ++i;
+            }
         }
+
+        (<HTMLSelectElement><any>opt).selectedIndex = index;
 
         return opt;
     }
@@ -87,17 +108,30 @@ namespace biodeep {
                 let colorVal: string = (<HTMLSelectElement><any>opt).value;
 
                 opt.style.backgroundColor = colorVal;
-                setValue(label, colorVal);
-            },
-            value: _default
+                setValue(label, colorVal.substr(1));
+            }
         });
+
+        let index = 0;
+        let i = 0;
+
+        _default = Strings.Empty(_default, true) ? "#ee3333" : ("#" + _default);
 
         for (let color of colors) {
             opt.appendElement($ts("<option>", {
                 value: color,
                 style: `background-color: ${color};`
             }).display(color));
+
+            if (color == _default) {
+                index = i;
+            } else {
+                ++i;
+            }
         }
+
+        (<HTMLSelectElement><any>opt).selectedIndex = index;
+        opt.style.backgroundColor = _default;
 
         return opt;
     }
