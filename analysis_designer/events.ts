@@ -18,7 +18,10 @@ namespace biodeep.UI_events {
                 if (!$ts(getCurrentDesigns())
                     .Any(function (a) {
                         // 跳过已经存在的比对组别
-                        return a.groups == $ts([...a.group_info].concat([...labels])).Distinct().Count;
+                        let all = $from([...a.group_info].concat([...labels]));
+                        let unique = all.Distinct();
+
+                        return (a.groups == labels.length) && (labels.length == unique.Count);
                     })) {
 
                     let designContainer = $ts("#designs")
