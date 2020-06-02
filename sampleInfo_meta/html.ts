@@ -1,5 +1,10 @@
+/// <reference path="../../../uikit/build/uikit.colorPicker.d.ts" />
+
 namespace biodeep {
 
+    /**
+     * 预设的颜色
+    */
     const colors: string[] = [
         "#ee3333",   // red
         "#3366aa",   // blue
@@ -97,18 +102,47 @@ namespace biodeep {
             }
         }
 
-        (<HTMLSelectElement><any>opt).selectedIndex = index;
+        let reset: Delegate.Action = function () {
+            (<HTMLSelectElement><any>opt).selectedIndex = index;
+        }
+
+        reset();
+        resetActions.push(reset);
 
         return opt;
     }
 
+    let current: HTMLSelectElement;
+    let currentSetVal: Delegate.Sub;
+    let currentLabel: string;
+    let currentMoreOpt: HTMLElement;
+
     function colorSetter(label: string, _default: string, setValue: Delegate.Sub) {
+        // 选择更多颜色
+        let setMore = function () {
+            current = <any>opt;
+            currentSetVal = setValue;
+            currentLabel = label;
+            currentMoreOpt = MoreOpt;
+
+            setMoreColors();
+        }
+        let MoreOpt = $ts("<option>", {
+            value: "more",
+            style: "background-color: white;",
+            onclick: setMore
+        }).display("选择更多颜色...");
+
         let opt = $ts("<select>", {
             onchange: function () {
                 let colorVal: string = (<HTMLSelectElement><any>opt).value;
 
-                opt.style.backgroundColor = colorVal;
-                setValue(label, colorVal.substr(1));
+                if (colorVal != "more") {
+                    opt.style.backgroundColor = colorVal;
+                    setValue(label, colorVal.substr(1));
+                } else {
+                    setMore();
+                }
             }
         });
 
@@ -130,9 +164,42 @@ namespace biodeep {
             }
         }
 
-        (<HTMLSelectElement><any>opt).selectedIndex = index;
-        opt.style.backgroundColor = _default;
+        let reset: Delegate.Action = function () {
+            (<HTMLSelectElement><any>opt).selectedIndex = index;
+            opt.style.backgroundColor = _default;
+        }
+
+        reset();
+        resetActions.push(reset);
+        opt.appendElement(MoreOpt);
 
         return opt;
+    }
+
+    let resetActions: Delegate.Action[] = [];
+
+    export function reset() {
+        for (let action of resetActions) {
+            action();
+        }
+    }
+
+    export function setColorValue(color: TypeScript.ColorManager.w3color) {
+        let colorStr: string = color.toHexString()
+
+        current.style.backgroundColor = colorStr;
+        current.value = colorStr;
+        currentSetVal(currentLabel, colorStr.substr(1));
+        currentMoreOpt.style.backgroundColor = colorStr;
+        currentMoreOpt.innerHTML = colorStr + " [重新选择颜色]";
+
+        console.log(colorStr);
+    }
+
+    function setMoreColors() {
+        console.log("设置更多的颜色");
+
+        $ts("#colorBox").show()
+        $ts("#pca2d-settings-panel").show();
     }
 }
