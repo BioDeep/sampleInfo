@@ -6,21 +6,15 @@ namespace biodeep {
      * 预设的颜色
     */
     const colors: string[] = [
-        "#ee3333",   // red
-        "#3366aa",   // blue
-        "#009872",   // green
-        "#982187",   // purple
-        "#faa200",   // yellow
-        "#267aa4",   // teal
-        "#910000",   // maroon
-        "#b56cfe",   // violet
-        "#00b7ec",   // cyan
-        "#f36a18",   // orange
-        "#534731",   // brown
-        "#fdb5da",   // pink
-        "#064650",   // bluegreen
-        "#b5dafe",   // sky
-        "#000000"
+        "#E41A1C",
+        "#377EB8",
+        "#4DAF4A",
+        "#984EA3",
+        "#FF7F00",
+        "#FFFF33",
+        "#A65628",
+        "#F781BF",
+        "#999999"
     ];
     const shapes: {} = {
         shape21: "●",
@@ -143,21 +137,24 @@ namespace biodeep {
                 } else {
                     setMore();
                 }
-            }
+            },
+            class: ["selectpicker", "form-control"]
         });
 
         let index = 0;
         let i = 0;
 
         _default = Strings.Empty(_default, true) ? "#ee3333" : ("#" + _default);
+        _default = _default.toLowerCase();
 
         for (let color of colors) {
             opt.appendElement($ts("<option>", {
                 value: color,
+                "data-content": `<span style="background-color: ${color};">&nbsp;&nbsp;&nbsp;</span> ${color}`,
                 style: `background-color: ${color};`
-            }).display(color));
+            }).display($ts("<div>").appendElement($ts("<span>", { style: `background-color: ${color};` }).display("&nbsp;&nbsp;&nbsp;")).appendElement($ts("<span>", { style: `background-color: white !important; color: black;` }).display(color))));
 
-            if (color == _default) {
+            if (color.toLowerCase() == _default) {
                 index = i;
             } else {
                 ++i;
