@@ -49,7 +49,5 @@ function loadDesigner(id: string, groups: string[], currentDesigns: analysisDesi
         designContainer.appendElement(biodeep.analysisDesignItem(labels, designContainer, handleUpdate));
     }    
 }
-(function () {
-    $ts(".myProjectNav").addClass("myProColor")
-})();
+
 

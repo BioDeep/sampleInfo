@@ -1,9 +1,11 @@
+/// <reference path="labelStack.ts" />
+
 namespace biodeep {
 
     export function createUI(handler: addDesign): HTMLElement {
         let all = $ts("<li>", { class: ["firstLi", "clearfix"] })
             .appendElement($ts("<h3>", { class: "cen" }).display("所有样本分组"))
-            .appendElement($ts("<p>", { class: "attentionLis" }).display("单击选中，再次单击可以取消选择"))
+            .appendElement($ts("<p>", { class: "attentionLis" }).display("单击选中，再次单击可以取消选择，<strong><span style='color: red;'>比对方式依照点击顺序产生</span></strong>"))
             .appendElement($ts("<div>", { class: "clearfix", id: "all_groups" }));
         let action = $ts("<li>", { class: "groEnt" })
             .display($ts("<a>", {
@@ -18,7 +20,7 @@ namespace biodeep {
             );
         let designerList = $ts("<li>", { class: "lastLi" })
             .appendElement($ts("<h3>", { class: "cen" }).display("已选组别比对"))
-            .appendElement($ts("<p>", { class: "attentionLis" }).display("拖动组内排序"))
+            .appendElement($ts("<p>", { class: "attentionLis" }).display("可以点击<span style='color: red;'>红色叉叉</span>删除误添加的比对信息"))
             .appendElement($ts("<div>", { class: "clearfix", id: "designs" }));
 
         return $ts("<ul>", {
@@ -30,11 +32,22 @@ namespace biodeep {
     }
 
     function getDeisgnerLabels(): string[] {
-        return $ts($ts("#all_groups").getElementsByTagName("div"))
-            .Where(div => div.classList.contains("ui-selected"))
-            .Select(div => div.getAttribute("data-target"))
-            .ToArray(false);
+        // 之前的代码是根据界面元素来设置的
+        // 所以没有顺序
+        //return $ts($ts("#all_groups").getElementsByTagName("div"))
+        //    .Where(div => div.classList.contains("ui-selected"))
+        //    .Select(div => div.getAttribute("data-target"))
+        //    .ToArray(false);
+
+        if (labels.n > 1) {
+            // 这个产生的是具有顺序的
+            return labels.popall();
+        } else {
+            return [];
+        }
     }
+
+    export const labels: labelStack = new labelStack();
 
     export function analysisDesignItem(labels: string[], container: HTMLElement, handleUpdate: Delegate.Action): HTMLElement {
         let designDiv = $ts("<div>", {
@@ -54,7 +67,7 @@ namespace biodeep {
             container.removeChild(designDiv);
             handleUpdate();
         }
-        
+
         for (let label of labels) {
             ulDiv.appendElement($ts("<div>", {
                 class: ["widget_group", "ui-sortable-handle"],
@@ -66,6 +79,6 @@ namespace biodeep {
         return designDiv
             .appendElement(iscurrent)
             .appendElement(ulDiv)
-            //.appendElement(remove);
+        //.appendElement(remove);
     }
 }
