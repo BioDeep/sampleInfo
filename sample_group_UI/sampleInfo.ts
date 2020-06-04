@@ -35,6 +35,32 @@ namespace biodeep {
         delete?: string;
     }
 
+    export function ensureSampleInfoModel(data: string[] | IEnumerator<string> | IsampleInfo[]): IsampleInfo[] {
+        let type = $ts.typeof(data);
+
+        if (type.isArrayOf("string") || type.isEnumerator) {
+            let strings: string[]
+
+            if (Array.isArray(data)) {
+                strings = <string[]>data;
+            } else {
+                strings = (<IEnumerator<string>>data).ToArray(false);
+            }
+
+            let groupInfo: NamedValue<string[]>[];
+
+            try {
+                groupInfo = biodeep.guess_groupInfo(strings);
+            } catch {
+                groupInfo = [new NamedValue<string[]>("unknown", strings)];
+            }
+
+            return biodeep.buildModels(groupInfo);
+        } else {
+            return <IsampleInfo[]>data;
+        }
+    }
+
     export function as_tabular(sampleInfo: IsampleInfo[] | IEnumerator<IsampleInfo>): string {
         return $ts.csv.toText(sampleInfo, false);
     }

@@ -33,7 +33,10 @@
             return text;
         }
 
-        public constructor(public container: string, sampleNames: string[] | IsampleInfo[]) {
+        /**
+         * @param builder 这个参数是用于兼容tableEditor模块的
+        */
+        public constructor(public container: string, sampleNames: string[] | IsampleInfo[], builder: sampleInfoTableBuilder) {
             let raw: IsampleInfo[]
             let type = $ts.typeof(sampleNames);
 
@@ -43,9 +46,13 @@
                 raw = <IsampleInfo[]>sampleNames;
             }
 
+            if (isNullOrUndefined(builder)) {
+                builder = sampleInfoUI.createSampleInfotable;
+            }
+
             $ts(container).clear();
             $ts(container).appendElement(sampleInfoUI.createContextMenu());
-            $ts(container).appendElement(sampleInfoUI.createSampleInfotable(raw));
+            $ts(container).appendElement(builder(raw));
 
             this.init();
             this.exitEditMode();
@@ -221,6 +228,9 @@
             }
         }
 
+        /**
+         * default method for create html table
+        */
         private static createSampleInfotable(model: biodeep.IsampleInfo[]): HTMLElement {
             return $ts.evalHTML.table(model, null, { id: "sampleinfo", class: ["sampleinfo", "table"] });
         }
