@@ -77,7 +77,9 @@ namespace biodeep {
                     injectionOrder: 0,
                     batch: 1,
                     color: "000000",
-                    shape: 19
+                    shape: 19,
+                    sample_info1: "",
+                    sample_info2: ""
                 });
             }
         }
