@@ -19,7 +19,9 @@
                     let cells = tr.getElementsByTagName("td");
 
                     for (let title of vm.tableTitles) {
-                        sample[title] = cells.item(vm.tableTitles.indexOf(title)).innerText;
+                        if (!Strings.Empty(title, true)) {
+                            sample[title] = cells.item(vm.tableTitles.indexOf(title)).innerText;
+                        }
                     }
 
                     return sample;
@@ -33,18 +35,22 @@
             return text;
         }
 
+        public get hasRowSelected(): boolean {
+            for (var i = 0; i < this.trs.length; i++) {
+                if (this.trs[i].classList.contains('selected')) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         /**
          * @param builder 这个参数是用于兼容tableEditor模块的
+         * @param getHeaders 设置这个参数一般是因为表头是被翻译过了的
         */
-        public constructor(public container: string, sampleNames: string[] | IsampleInfo[], builder: sampleInfoTableBuilder) {
-            let raw: IsampleInfo[]
-            let type = $ts.typeof(sampleNames);
-
-            if (type.isArrayOf("string")) {
-                raw = biodeep.buildModels(biodeep.guess_groupInfo(<string[]>sampleNames));
-            } else {
-                raw = <IsampleInfo[]>sampleNames;
-            }
+        public constructor(public container: string, sampleNames: string[] | IsampleInfo[], builder: sampleInfoTableBuilder, getHeaders: Delegate.Func<string[]> = null) {
+            let raw: IsampleInfo[] = biodeep.ensureSampleInfoModel(sampleNames);
 
             if (isNullOrUndefined(builder)) {
                 builder = sampleInfoUI.createSampleInfotable;
@@ -54,7 +60,7 @@
             $ts(container).appendElement(sampleInfoUI.createContextMenu());
             $ts(container).appendElement(builder(raw));
 
-            this.init();
+            this.init(getHeaders);
             this.exitEditMode();
         }
 
@@ -66,7 +72,7 @@
         /**
          * hook events
         */
-        private init() {
+        private init(getHeaders: Delegate.Func<string[]>) {
             let vm = this;
 
             // disable text selection
@@ -77,13 +83,18 @@
             this.trs = (<HTMLTableElement>$ts("#sampleinfo").any)
                 .tBodies[0]
                 .getElementsByTagName("tr");
-            this.tableTitles = $ts(
-                (<HTMLTableElement>$ts("#sampleinfo").any)
-                    .tHead
-                    .getElementsByTagName("th")
-            )
-                .Select(th => th.innerText)
-                .ToArray(false);
+
+            if (isNullOrUndefined(getHeaders)) {
+                this.tableTitles = $ts(
+                    (<HTMLTableElement>$ts("#sampleinfo").any)
+                        .tHead
+                        .getElementsByTagName("th")
+                )
+                    .Select(th => th.innerText)
+                    .ToArray(false);
+            } else {
+                this.tableTitles = getHeaders();
+            }
 
             $ts(this.trs).ForEach(tr => tr.onmousedown = function () {
                 vm.RowClick(tr, false);
@@ -93,27 +104,35 @@
             this.registerContextMenu();
         }
 
+        private displayMenu(a: Event): boolean {
+            let menuBox: HTMLElement = window.document.querySelector(".menu");
+
+            if (this.editMode) {
+                let left = arguments[0].clientX;
+                let top = arguments[0].clientY;
+                let active: boolean = this.hasRowSelected;
+
+                menuBox.style.left = left + "px";
+                menuBox.style.top = top + "px";
+                menuBox.style.display = "block";
+
+                $ts("#add-group").interactive(active);
+                $ts("#add-batch").interactive(active);
+
+                a.preventDefault();
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         private registerContextMenu() {
             let menuDisplayed = false;
-            let menuBox: HTMLElement = null;
+            let menuBox: HTMLElement = window.document.querySelector(".menu");
             let vm = this;
 
-            window.addEventListener("contextmenu", function () {
-                if (vm.editMode) {
-                    let left = arguments[0].clientX;
-                    let top = arguments[0].clientY;
-
-                    menuBox = window.document.querySelector(".menu");
-                    menuBox.style.left = left + "px";
-                    menuBox.style.top = top + "px";
-                    menuBox.style.display = "block";
-
-                    arguments[0].preventDefault();
-
-                    menuDisplayed = true;
-                }
-            }, false);
-
+            window.addEventListener("contextmenu", a => menuDisplayed = this.displayMenu(a), false);
             window.addEventListener("click", function () {
                 if (menuDisplayed == true) {
                     menuBox.style.display = "none";
@@ -238,6 +257,7 @@
         private static createContextMenu(): HTMLElement {
             let div = $ts("<div>", { id: "context", class: "menu" });
 
+            div.hide();
             div.appendElement($ts("<div>", { class: "menu-item", id: "add-group" }).display("批量编辑样本分组"));
             div.appendElement($ts("<div>", { class: "menu-item", id: "add-batch" }).display("批量编辑实验批次"));
             div.appendElement($ts("<hr>", { style: "margin-top: 5px; margin-bottom: 5px;" }));

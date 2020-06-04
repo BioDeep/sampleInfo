@@ -19,7 +19,7 @@ namespace biodeep.ui {
             }).display(`
         .menu {
             width: 150px;
-            box-shadow: 3px 3px 5px #888888;
+            box-shadow: 1px 1px 5px #888888;
             border-style: solid;
             border-width: 1px;
             border-color: grey;
@@ -29,7 +29,6 @@ namespace biodeep.ui {
             padding-top: 3px;
             padding-bottom: 3px;
             position: fixed;
-            display: none;
             background-color: white;
         }
 
