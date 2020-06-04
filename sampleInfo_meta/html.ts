@@ -29,6 +29,9 @@ namespace biodeep {
         shape6: "▽"
     };
 
+    let colorPickers: {} = {};
+    let instance: metaEditor;
+
     export class metaEditor {
 
         public constructor(public sampleMeta: IsampleMeta[], div: string) {
@@ -41,6 +44,10 @@ namespace biodeep {
             );
             let body = $ts("<tbody>");
             let row: IHTMLElement;
+            let pickers: string[] = [];
+            let labels: {} = {};
+            let defaultColors: {} = {};
+            let metadata: {} = {};
 
             for (let meta of sampleMeta) {
                 if (Strings.Empty(meta.color, true)) {
@@ -50,17 +57,61 @@ namespace biodeep {
                     meta.shape = 0;
                 }
 
+                let pickerId: string = `color-${meta.sampleInfo.replace(/\./g, "-")}`;
+
                 row = $ts("<tr>");
                 row.appendElement($ts("<td>").display(meta.sampleInfo));
-                row.appendElement($ts("<td>").display(colorSetter(meta.sampleInfo, meta.color, <any>((label, value) => this.colorSetter(label, value)))));
+                row.appendElement($ts("<td>", { id: pickerId }));
+                // row.appendElement($ts("<td>").display(colorSetter(meta.sampleInfo, meta.color, <any>((label, value) => this.colorSetter(label, value)))));
                 row.appendElement($ts("<td>").display(shapeSetter(meta.sampleInfo, <any>meta.shape, <any>((label, value) => this.shapeSetter(label, value)))));
+
+                pickers.push(pickerId);
+                labels[pickerId] = meta.sampleInfo;
+                defaultColors[pickerId] = Strings.Empty(meta.color, true) ? "#ee3333" : ("#" + meta.color);
+                metadata[pickerId] = meta;
 
                 body.appendElement(row);
             }
 
             table.appendElement(header).appendElement(body);
 
-            $ts(div).clear().appendElement(table);
+            $ts(div)
+                .clear()
+                .appendElement(table);
+
+            let color: string;
+            let colorPicker: uikit.colorPicker.colorPickerUI;
+
+            for (let id of pickers) {
+                let currentLabel = metaEditor.holdLabel(labels[id]);
+
+                colorPicker = uikit.colorPicker.fast("#" + id, colors, this.setColor(labels[id]), defaultColors[id], function () {
+                    currentSampleinfo = currentLabel();
+                    setMoreColors();
+                });
+                color = colorPicker.color;
+                color = color.replace(/[#]+/g, "");
+
+                colorPickers[labels[id]] = colorPicker;
+
+                (<IsampleMeta>metadata[id]).color = color;
+            }
+
+            instance = this;
+        }
+
+        private static holdLabel(label: string) {
+            return function (): string {
+                return label;
+            }
+        }
+
+        public setColor(label: string) {
+            let vm = this;
+
+            return function (color: string) {
+                vm.colorSetter(label, color.substr(1));
+            }
         }
 
         shapeSetter(label: string, value: string) {
@@ -181,14 +232,19 @@ namespace biodeep {
         }
     }
 
-    export function setColorValue(color: TypeScript.ColorManager.w3color) {
-        let colorStr: string = color.toHexString()
+    let currentSampleinfo: string;
 
-        current.style.backgroundColor = colorStr;
-        current.value = colorStr;
-        currentSetVal(currentLabel, colorStr.substr(1));
-        currentMoreOpt.style.backgroundColor = colorStr;
-        currentMoreOpt.innerHTML = colorStr + " [重新选择颜色]";
+    export function setColorValue(color: TypeScript.ColorManager.w3color) {
+        let colorStr: string = color.toHexString();
+
+        //current.style.backgroundColor = colorStr;
+        //current.value = colorStr;
+        //currentSetVal(currentLabel, colorStr.substr(1));
+        //currentMoreOpt.style.backgroundColor = colorStr;
+        //currentMoreOpt.innerHTML = colorStr + " [重新选择颜色]";
+
+        (<uikit.colorPicker.colorPickerUI>colorPickers[currentSampleinfo]).setDisplayColor(colorStr);
+        instance.setColor(currentSampleinfo)(colorStr);
 
         console.log(colorStr);
     }
