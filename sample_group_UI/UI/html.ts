@@ -1,5 +1,8 @@
 ﻿namespace biodeep {
 
+    export const sampleInfoId: string = "input-sampleinfo";
+    export const batchInfoId: string = "input-batchinfo";
+
     /**
      * UI class for create sample group information
     */
@@ -111,7 +114,10 @@
             }, true);
 
             $ts("#add-group").onclick = function () {
-                vm.buildSampleInfo();
+                vm.buildSampleInfo(`#${sampleInfoId}`);
+            }
+            $ts("#add-batch").onclick = function () {
+                vm.buildSampleInfo(`#${batchInfoId}`);
             }
             $ts("#exit-edit-mode").onclick = function () {
                 vm.exitEditMode();
@@ -126,22 +132,40 @@
             this.editMode = false;
         }
 
-        private buildSampleInfo() {
+        private buildSampleInfo(id: string) {
             let selects = $ts.select(".selected");
             let vm = this;
 
-            $('#myModal').modal();
-            $input("#sample-groupName").value = null;
-            $ts("#group_checked").onclick = function () {
-                let name: string = $ts.value("#sample-groupName");
+            $(id).modal();
+            $input(`#sample-${sampleInfoId}`).value = null;
+            $input(`#sample-${batchInfoId}`).value = null;
+            $ts.select(".group_checked").ForEach(a => a.onclick = vm.hookDataUpdates(selects));
+        }
+
+        private hookDataUpdates(selects: DOMEnumerator<HTMLElement>) {
+            let vm = this;
+
+            return function () {
+                let name: string = $ts.value(`#sample-${sampleInfoId}`);
+                let batch: string = $ts.value(`#sample-${batchInfoId}`);
                 let index: number = vm.tableTitles.indexOf("sample_info");
 
-                if (Strings.Empty(name)) {
-                    return;
+                if (!Strings.Empty(name)) {
+                    for (let tr of selects.ToArray(false)) {
+                        tr.getElementsByTagName("td").item(index).innerText = name;
+                    }
                 }
 
-                for (let tr of selects.ToArray(false)) {
-                    tr.getElementsByTagName("td").item(index).innerText = name;
+                index = vm.tableTitles.indexOf("batch");
+
+                if (!Strings.Empty(batch)) {
+                    if (!Strings.isIntegerPattern(batch)) {
+                        return alert("批次编号应该是一个任意整型数字符串！");
+                    }
+
+                    for (let tr of selects.ToArray(false)) {
+                        tr.getElementsByTagName("td").item(index).innerText = batch;
+                    }
                 }
 
                 vm.exitEditMode();
@@ -204,7 +228,9 @@
         private static createContextMenu(): HTMLElement {
             let div = $ts("<div>", { id: "context", class: "menu" });
 
-            div.appendElement($ts("<div>", { class: "menu-item", id: "add-group" }).display("添加样本分组"));
+            div.appendElement($ts("<div>", { class: "menu-item", id: "add-group" }).display("批量编辑样本分组"));
+            div.appendElement($ts("<div>", { class: "menu-item", id: "add-batch" }).display("批量编辑实验批次"));
+            div.appendElement($ts("<hr>", { style: "margin-top: 5px; margin-bottom: 5px;" }));
             div.appendElement($ts("<div>", { class: "menu-item", id: "exit-edit-mode" }).display("退出编辑模式"));
 
             return div;
