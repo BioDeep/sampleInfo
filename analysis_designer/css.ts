@@ -36,6 +36,7 @@ ul.ui-sortable {
 .groupCount {
     display: flex;
     justify-content: space-between;
+    padding: 0 40px;
 }
 #all_groups {
     padding: 0 10px;
