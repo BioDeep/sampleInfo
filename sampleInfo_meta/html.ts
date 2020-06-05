@@ -100,6 +100,19 @@ namespace biodeep {
             instance = this;
         }
 
+        private static jqueryColorPickerUI(id: string, _default: string) {
+            return $ts("<div>", {
+                style: "width:128px;"
+            }).display($ts("<input>", {
+                style: "width:100px;",
+                id: id,
+                name: id,
+                class: ["colorPicker", "evo-cp0"],
+                placeholder: _default,
+                value: _default
+            }))
+        }
+
         private static holdLabel(label: string) {
             return function (): string {
                 return label;
