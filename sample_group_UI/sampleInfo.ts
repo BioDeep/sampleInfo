@@ -57,7 +57,18 @@ namespace biodeep {
 
             return biodeep.buildModels(groupInfo);
         } else {
-            return <IsampleInfo[]>data;
+            let copy = <IsampleInfo[]>data;
+
+            for (let item of copy) {
+                if (Strings.Empty(item.sample_info1, true)) {
+                    item.sample_info1 = "";
+                }
+                if (Strings.Empty(item.sample_info2, true)) {
+                    item.sample_info2 = "";
+                }
+            }
+
+            return copy;
         }
     }
 

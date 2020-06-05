@@ -2,6 +2,8 @@
 
     export const sampleInfoId: string = "input-sampleinfo";
     export const batchInfoId: string = "input-batchinfo";
+    export const sample1Id: string = "input-sample1";
+    export const sample2Id: string = "input-sample2";
 
     /**
      * UI class for create sample group information
@@ -145,6 +147,15 @@
             $ts("#add-batch").onclick = function () {
                 vm.buildSampleInfo(`#${batchInfoId}`);
             }
+
+            $ts("#add-sample1").onclick = function () {
+                vm.buildSampleInfo(`#${sample1Id}`);
+            }
+
+            $ts("#add-sample2").onclick = function () {
+                vm.buildSampleInfo(`#${sample2Id}`);
+            }
+
             $ts("#exit-edit-mode").onclick = function () {
                 vm.exitEditMode();
             }
@@ -165,6 +176,8 @@
             $(id).modal();
             $input(`#sample-${sampleInfoId}`).value = null;
             $input(`#sample-${batchInfoId}`).value = null;
+            $input(`#sample-${sample1Id}`).value = null;
+            $input(`#sample-${sample2Id}`).value = null;
             $ts.select(".group_checked").ForEach(a => a.onclick = vm.hookDataUpdates(selects));
         }
 
@@ -174,17 +187,36 @@
             return function () {
                 let name: string = $ts.value(`#sample-${sampleInfoId}`);
                 let batch: string = $ts.value(`#sample-${batchInfoId}`);
+                let sample1: string = $ts.value(`#sample-${sample1Id}`);
+                let sample2: string = $ts.value(`#sample-${sample2Id}`);
+
                 let index: number = vm.tableTitles.indexOf("sample_info");
 
-                if (!Strings.Empty(name)) {
+                if (!Strings.Empty(name, true)) {
                     for (let tr of selects.ToArray(false)) {
                         tr.getElementsByTagName("td").item(index).innerText = name;
                     }
                 }
 
+                index = vm.tableTitles.indexOf("sample_info1");
+
+                if (!Strings.Empty(sample1, true)) {
+                    for (let tr of selects.ToArray(false)) {
+                        tr.getElementsByTagName("td").item(index).innerText = sample1;
+                    }
+                }
+
+                index = vm.tableTitles.indexOf("sample_info2");
+
+                if (!Strings.Empty(sample2, true)) {
+                    for (let tr of selects.ToArray(false)) {
+                        tr.getElementsByTagName("td").item(index).innerText = sample2;
+                    }
+                }
+
                 index = vm.tableTitles.indexOf("batch");
 
-                if (!Strings.Empty(batch)) {
+                if (!Strings.Empty(batch, true)) {
                     if (!Strings.isIntegerPattern(batch)) {
                         return alert("批次编号应该是一个任意整型数字符串！");
                     }
@@ -260,6 +292,8 @@
             div.hide();
             div.appendElement($ts("<div>", { class: "menu-item", id: "add-group" }).display("批量编辑样本分组"));
             div.appendElement($ts("<div>", { class: "menu-item", id: "add-batch" }).display("批量编辑实验批次"));
+            div.appendElement($ts("<div>", { class: "menu-item", id: "add-sample1" }).display("编辑亚型分类A"));
+            div.appendElement($ts("<div>", { class: "menu-item", id: "add-sample2" }).display("编辑亚型分类B"));
             div.appendElement($ts("<hr>", { style: "margin-top: 5px; margin-bottom: 5px;" }));
             div.appendElement($ts("<div>", { class: "menu-item", id: "exit-edit-mode" }).display("退出编辑模式"));
 
