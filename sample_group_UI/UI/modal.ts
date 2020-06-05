@@ -18,7 +18,7 @@
             </div>  
             <div class="modal-footer">  
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>  
-                <button type="button" class="group_checked btn btn-primary" data-dismiss="modal">确定</button>  
+                <button field="${id}" type="button" class="group_checked btn btn-primary" data-dismiss="modal">确定</button>  
             </div>`));
         let modal = $ts("<div>", {
             class: ["modal", "fade"],

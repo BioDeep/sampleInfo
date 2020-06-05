@@ -178,10 +178,10 @@
             $input(`#sample-${batchInfoId}`).value = null;
             $input(`#sample-${sample1Id}`).value = null;
             $input(`#sample-${sample2Id}`).value = null;
-            $ts.select(".group_checked").ForEach(a => a.onclick = vm.hookDataUpdates(selects));
+            $ts.select(".group_checked").ForEach(a => a.onclick = vm.hookDataUpdates(selects, a.getAttribute("field")));
         }
 
-        private hookDataUpdates(selects: DOMEnumerator<HTMLElement>) {
+        private hookDataUpdates(selects: DOMEnumerator<HTMLElement>, field: string) {
             let vm = this;
 
             return function () {
@@ -189,41 +189,40 @@
                 let batch: string = $ts.value(`#sample-${batchInfoId}`);
                 let sample1: string = $ts.value(`#sample-${sample1Id}`);
                 let sample2: string = $ts.value(`#sample-${sample2Id}`);
+                let index: number
 
-                let index: number = vm.tableTitles.indexOf("sample_info");
+                // 20200605 在这里允许空字符串
+                // 空字符串表示进行批量信息删除
+                if (field == sampleInfoId) {
+                    index = vm.tableTitles.indexOf("sample_info");
 
-                if (!Strings.Empty(name, true)) {
                     for (let tr of selects.ToArray(false)) {
                         tr.getElementsByTagName("td").item(index).innerText = name;
                     }
-                }
+                } else if (field == sample1Id) {
+                    index = vm.tableTitles.indexOf("sample_info1");
 
-                index = vm.tableTitles.indexOf("sample_info1");
-
-                if (!Strings.Empty(sample1, true)) {
                     for (let tr of selects.ToArray(false)) {
                         tr.getElementsByTagName("td").item(index).innerText = sample1;
                     }
-                }
+                } else if (field == sample2Id) {
+                    index = vm.tableTitles.indexOf("sample_info2");
 
-                index = vm.tableTitles.indexOf("sample_info2");
-
-                if (!Strings.Empty(sample2, true)) {
                     for (let tr of selects.ToArray(false)) {
                         tr.getElementsByTagName("td").item(index).innerText = sample2;
                     }
-                }
+                } else if (field == batchInfoId) {
+                    index = vm.tableTitles.indexOf("batch");
 
-                index = vm.tableTitles.indexOf("batch");
-
-                if (!Strings.Empty(batch, true)) {
-                    if (!Strings.isIntegerPattern(batch)) {
+                    if (!Strings.Empty(batch, true) && !Strings.isIntegerPattern(batch)) {
                         return alert("批次编号应该是一个任意整型数字符串！");
                     }
 
                     for (let tr of selects.ToArray(false)) {
                         tr.getElementsByTagName("td").item(index).innerText = batch;
                     }
+                } else {
+                    console.warn(`invalid tag string: ${field}!`);
                 }
 
                 vm.exitEditMode();

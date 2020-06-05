@@ -132,7 +132,11 @@ namespace biodeep {
         }
 
         colorSetter(label: string, value: string) {
-            $from(this.sampleMeta).Where(a => a.sampleInfo == label).First.color = value;
+            let sample = $from(this.sampleMeta).Where(a => a.sampleInfo == label).First;
+
+            sample.color = value;
+            sample.color1 = value;
+            sample.color2 = value;
         }
     }
 
