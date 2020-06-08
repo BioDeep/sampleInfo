@@ -133,10 +133,14 @@ namespace biodeep {
 
         colorSetter(label: string, value: string) {
             let sample = $from(this.sampleMeta).Where(a => a.sampleInfo == label).First;
+            let colorModel = new TypeScript.ColorManager.w3color("#" + value);
+            let a = new TypeScript.ColorManager.w3color(`rgb(${Math.round(colorModel.red / 2)}, ${Math.round(colorModel.green / 2)}, ${Math.round(colorModel.blue / 2)})`);
+            let b = new TypeScript.ColorManager.w3color(`rgb(${255 - Math.round(colorModel.red / 2)}, ${255 - Math.round(colorModel.green / 2)}, ${255 - Math.round(colorModel.blue / 2)})`);
 
             sample.color = value;
-            sample.color1 = value;
-            sample.color2 = value;
+
+            if (Strings.Empty(sample.color1, true)) { sample.color1 = a.toHexString().substr(1); }
+            if (Strings.Empty(sample.color2, true)) { sample.color2 = b.toHexString().substr(1); }
         }
     }
 
