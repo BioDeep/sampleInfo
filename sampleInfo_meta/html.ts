@@ -38,7 +38,7 @@ namespace biodeep {
             let table: IHTMLElement = $ts("<table>", { class: "table" });
             let header = $ts("<thead>").appendElement(
                 $ts("<tr>")
-                    .appendElement($ts("<th>").display("分组名称"))
+                    .appendElement($ts("<th>").display("组别名称"))
                     .appendElement($ts("<th>").display("颜色"))
                     .appendElement($ts("<th>").display("形状"))
             );
