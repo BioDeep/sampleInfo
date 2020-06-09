@@ -30,6 +30,7 @@ namespace biodeep.ui {
             padding-bottom: 3px;
             position: fixed;
             background-color: white;
+            z-index: 999;
         }
 
         .menu-item {

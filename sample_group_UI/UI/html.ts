@@ -120,6 +120,8 @@
 
                 $ts("#add-group").interactive(active);
                 $ts("#add-batch").interactive(active);
+                $ts("#add-sample1").interactive(active);
+                $ts("#add-sample2").interactive(active);
 
                 a.preventDefault();
 
