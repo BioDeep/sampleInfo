@@ -265,7 +265,7 @@
                 return a - b;
             });
 
-            for (var i = indexes[0]; i <= indexes[1]; i++) {
+            for (var i = indexes[0] - 1; i < indexes[1]; i++) {
                 tr = this.trs[i];
 
                 if (!isNullOrUndefined(tr)) {
